@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        <!-- private Integer film_id;
+	private String title;
+	private String description;
+	private Integer language_id; -->
+	
+<mapper namespace="cn.hand.exam.dao.FilmDao">   
+    <insert id="addFilminformation" useGeneratedKeys="true" keyProperty="id">
+       INSERT INTO film(film_id,title,description,language_id) 
+       values(#{film_id},#{title},#{description},#{language_id});
+    </insert> 
+    </mapper>
