@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:aop="http://www.springframework.org/schema/aop" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+
+    <context:property-placeholder location="classpath*:db.properties" />
+
+    <!--2 配置C3P0数据源 -->
+    <bean id="datasource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <!--驱动类名 -->
+        <property name="driverClass" value="${driver}" />
+        <!-- url -->
+        <property name="jdbcUrl" value="${url}" />
+        <!-- 用户名 -->
+        <property name="user" value="${username}" />
+        <!-- 密码 -->
+        <property name="password" value="${passworld}" />
+        
+        <property name="acquireIncrement" value="5"></property>
+        <!-- 初始连接池大小 -->
+        <property name="initialPoolSize" value="10"></property>
+        <!-- 连接池中连接最小个数 -->
+        <property name="minPoolSize" value="5"></property>
+        <!-- 连接池中连接最大个数 -->
+        <property name="maxPoolSize" value="20"></property>
+    </bean>
+    
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 实体映射文件 -->
+        <property name="dataSource" ref="datasource"></property>
+        <property name="typeAliasesPackage" value="cn.hand.exam.entity"></property>
+        <property name="mapperLocations" value="classpath:cn/hand/exam/entity/FilmMapper.xml"></property>
+    </bean>
+    
+    <bean id="filmDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="cn.hand.exam.dao.FilmDao"></property>
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+	</bean>
+    
+    <!--7 aspectj支持自动代理实现AOP功能 -->
+    <aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>
+</beans>
